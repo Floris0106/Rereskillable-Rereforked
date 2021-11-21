@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[36.2,)"
+license = "MIT"
+
+[[mods]]
+    modId = "rereskillablerereforked"
+    version = "${file.jarVersion}"
+    displayName = "Rereskillable Rereforked"
+    displayURL = "https://www.curseforge.com/minecraft/mc-mods/rereskillable-rereforked"
+    logoFile = "icon.png"
+    credits = "Credits go to Vazkii (author of Skillable), lanse505 (author of Reskillable, among others) and majik (author of Rereskillable)."
+    authors = "Floris0106"
+    description = '''
+Rereskillable Rereforked is a fork of Rereskillable, which is a fork of Reskillable, which is a fork of Skillable.
+'''
+
+[[dependencies.rereskillablerereforked]]
+    modId = "forge"
+    mandatory = true
+    versionRange = "[36.2,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.rereskillablerereforked]]
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.16.5]"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.rereskillablerereforked]]
+    modId = "curios"
+    mandatory = false
+    versionRange = "[1.16.5-4.0.4.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
