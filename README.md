@@ -1,11 +1,12 @@
-# Rereskillable
+# Rereskillable Rereforked
 
-Rereskillable is a mod for Minecraft 1.16.5 that adds upgradeable skills and allows pack developers to lock different features behind those skills. Rereskillable is also compatible with Curios API - items that are put into curios slots will behave the same as armour. Heavily inspired by Reskillable and Skillable.
+Rereskillable Rereforked is a fork of Rereskillable, which is a fork of Reskillable, which is a fork of Skillable.
 
 This mod allows you to lock:
 - Items (using, wearing)
 - Blocks (breaking, placing)
-- Entities (mounting)
+- Entities (mounting, loot tables)
+Behid levels in 8 different skills.
 
 ## Configuration
 
@@ -13,6 +14,8 @@ Config options include:
 - Disabling sheep wool drops
 - Changing the starting upgrade cost in XP levels
 - Changing the maximum skill level
+- Specifying whether Skill Fragments should be used to level up skills instead of XP levels
+- Changing how many Skill Fragments can be obtained from different kinds of advancements
 - Specifying a list of skill locks
 
 ## Skill Locks
@@ -32,28 +35,31 @@ For example:
 
 To set a skill level:
 ```
-/skills set [player] [skill] [level]
+/skills [player] set [skill] [level]
 ```
 To get a skill level:
 ```
-/skills get [player] [skill]
+/skills [player] get [skill]
+```
+To reset all skill levels:
+```
+/skills [player] reset
 ```
 
 ## Known Issues
 
 - You can't lock the Totem of Undying from being used.
 - You can block items from being used regardless of skill only by setting the requirement to a level above max skill level (example: "minecraft:shield magic:69")
+- Locking loot tables is not implemented
 
 ## Support
 
-I stopped working on this mod and there will not be a Fabric port from me.
-
-But if anyone wants to fork this mod or port it to Fabric, feel free to do it, you can do anything with this code.
+I forked this mod to use in a modpack i'm working on, so updates won't be frequent, but feel free to report issues or submit pull requests if you want ot help with development!
 
 ## Modpacks
 
-Feel free to use this mod in any modpacks, but please do add a credit to the modpack's page.
+Please, go ahead and use this mod in your modpack! It's what the mod was designed for!
 
 ## Credits
 
-Reskillable and Skillable
+Credits go to Vazkii (author of Skillable), lanse505 (author of Reskillable, among others) and majik (author of Rereskillable).
