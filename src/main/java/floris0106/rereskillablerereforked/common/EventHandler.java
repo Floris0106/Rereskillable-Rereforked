@@ -161,7 +161,7 @@ public class EventHandler
             DisplayInfo display = event.getAdvancement().getDisplay();
 
             if (display == null)
-                fragments = 1;
+                fragments = Config.getSkillFragmentsFromTaskAdvancements();
             else
                 switch (display.getFrame())
                 {
