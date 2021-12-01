@@ -9,11 +9,12 @@ import floris0106.rereskillablerereforked.common.compat.CuriosCompat;
 import floris0106.rereskillablerereforked.common.EventHandler;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
 import floris0106.rereskillablerereforked.common.capabilities.SkillStorage;
-import floris0106.rereskillablerereforked.common.commands.Commands;
+import floris0106.rereskillablerereforked.common.commands.ModCommands;
 import floris0106.rereskillablerereforked.common.item.Items;
-import floris0106.rereskillablerereforked.common.network.NotifyWarning;
+import floris0106.rereskillablerereforked.common.network.SkillWarning;
 import floris0106.rereskillablerereforked.common.network.RequestLevelUp;
-import floris0106.rereskillablerereforked.common.network.SyncToClient;
+import floris0106.rereskillablerereforked.common.network.SyncConfig;
+import floris0106.rereskillablerereforked.common.network.SyncSkills;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -33,7 +34,7 @@ public class RereskillableRereforked
 {
     public static final String MOD_ID = "rereskillablerereforked";
 
-    public static SimpleChannel NETWORK;
+    public static SimpleChannel network;
 
     public RereskillableRereforked()
     {
@@ -47,15 +48,17 @@ public class RereskillableRereforked
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         CapabilityManager.INSTANCE.register(SkillModel.class, new SkillStorage(), () -> { throw new UnsupportedOperationException("No Implementation!"); });
+
         Config.load();
 
-        NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MOD_ID, "main_channel"), () -> "1.0", s -> true, s -> true);
-        NETWORK.registerMessage(1, SyncToClient.class, SyncToClient::encode, SyncToClient::new, SyncToClient::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-        NETWORK.registerMessage(2, RequestLevelUp.class, RequestLevelUp::encode, RequestLevelUp::new, RequestLevelUp::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-        NETWORK.registerMessage(3, NotifyWarning.class, NotifyWarning::encode, NotifyWarning::new, NotifyWarning::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        network = NetworkRegistry.newSimpleChannel(new ResourceLocation(MOD_ID, "network"), () -> "1.0", s -> true, s -> true);
+        network.registerMessage(0, SyncSkills.class, SyncSkills::encode, SyncSkills::new, SyncSkills::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        network.registerMessage(1, RequestLevelUp.class, RequestLevelUp::encode, RequestLevelUp::new, RequestLevelUp::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        network.registerMessage(2, SkillWarning.class, SkillWarning::encode, SkillWarning::new, SkillWarning::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        network.registerMessage(3, SyncConfig.class, SyncConfig::encode, SyncConfig::new, SyncConfig::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
         MinecraftForge.EVENT_BUS.register(new EventHandler());
-        MinecraftForge.EVENT_BUS.register(new Commands());
+        MinecraftForge.EVENT_BUS.register(new ModCommands());
 
         if (ModList.get().isLoaded("curios"))
             MinecraftForge.EVENT_BUS.register(new CuriosCompat());

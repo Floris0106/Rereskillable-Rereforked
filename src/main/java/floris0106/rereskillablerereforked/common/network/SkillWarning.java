@@ -11,16 +11,16 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
-public class NotifyWarning
+public class SkillWarning
 {
     private final ResourceLocation resource;
     
-    public NotifyWarning(ResourceLocation resource)
+    public SkillWarning(ResourceLocation resource)
     {
         this.resource = resource;
     }
     
-    public NotifyWarning(PacketBuffer buffer)
+    public SkillWarning(PacketBuffer buffer)
     {
         resource = buffer.readResourceLocation();
     }
@@ -38,6 +38,6 @@ public class NotifyWarning
     
     public static void send(PlayerEntity player, ResourceLocation resource)
     {
-        RereskillableRereforked.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new NotifyWarning(resource));
+        RereskillableRereforked.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new SkillWarning(resource));
     }
 }

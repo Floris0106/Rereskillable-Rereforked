@@ -1,7 +1,7 @@
 package floris0106.rereskillablerereforked.common.network;
 
 import floris0106.rereskillablerereforked.RereskillableRereforked;
-import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
+import floris0106.rereskillablerereforked.common.Config;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -11,33 +11,37 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
-public class SyncToClient
+public class SyncConfig
 {
-    private final CompoundNBT skillModel;
-    
-    public SyncToClient(CompoundNBT skillModel)
+    private final Config config;
+
+    public SyncConfig(Config config)
     {
-        this.skillModel = skillModel;
+        this.config = config;
     }
-    
-    public SyncToClient(PacketBuffer buffer)
+
+    public SyncConfig(PacketBuffer buffer)
     {
-        skillModel = buffer.readNbt();
+        config = new Config(buffer.readNbt());
     }
-    
+
     public void encode(PacketBuffer buffer)
     {
-        buffer.writeNbt(skillModel);
+        System.out.println("encode");
+
+        CompoundNBT nbt = new CompoundNBT();
+        Config.get().encode(nbt);
+        buffer.writeNbt(nbt);
     }
-    
+
     public void handle(Supplier<NetworkEvent.Context> context)
     {
-        context.get().enqueueWork(() -> SkillModel.get().deserializeNBT(skillModel));
+        context.get().enqueueWork(() -> Config.set(config));
         context.get().setPacketHandled(true);
     }
-    
+
     public static void send(PlayerEntity player)
     {
-        RereskillableRereforked.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new SyncToClient(SkillModel.get(player).serializeNBT()));
+        RereskillableRereforked.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new SyncConfig(Config.get()));
     }
 }

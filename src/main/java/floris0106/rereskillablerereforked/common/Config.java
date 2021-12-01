@@ -2,6 +2,9 @@ package floris0106.rereskillablerereforked.common;
 
 import floris0106.rereskillablerereforked.common.skills.Requirement;
 import floris0106.rereskillablerereforked.common.skills.Skill;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -26,7 +29,18 @@ public class Config
     private static final ForgeConfigSpec.IntValue MAXIMUM_LEVEL;
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> SKILL_LOCKS;
 
-    private static final Map<String, Requirement[]> skillLocks = new HashMap<>();
+    private static Config config;
+
+    private boolean disableWool = true;
+    private boolean deathReset = false;
+    private boolean useSkillFragments = true;
+    private int skillFragmentsFromTask = 1;
+    private int skillFragmentsFromGoal = 2;
+    private int skillFragmentsFromChallenge = 3;
+    private int startingCost = 2;
+    private int costIncrease = 1;
+    private int maxLevel = 32;
+    private final Map<ResourceLocation, Requirement[]> skillLocks = new HashMap<>();
     
     static
     {
@@ -65,6 +79,66 @@ public class Config
         CONFIG_SPEC = builder.build();
     }
 
+    public Config() { }
+
+    public Config(CompoundNBT nbt)
+    {
+        disableWool = nbt.getBoolean("disable_wool");
+        deathReset = nbt.getBoolean("death_reset");
+        useSkillFragments = nbt.getBoolean("use_skill_fragments");
+        skillFragmentsFromTask = nbt.getInt("skill_fragments_from_task");
+        skillFragmentsFromGoal = nbt.getInt("skill_fragments_from_goal");
+        skillFragmentsFromChallenge = nbt.getInt("skill_fragments_from_challenge");
+        startingCost = nbt.getInt("starting_cost");
+        costIncrease = nbt.getInt("cost_increase");
+        maxLevel = nbt.getInt("max_level");
+
+        ListNBT skillLocksNBT = nbt.getList("skill_locks", 8);
+        skillLocksNBT.forEach(skillLock ->
+        {
+            StringNBT string = (StringNBT)skillLock;
+
+            String[] entry = string.getAsString().split(" ");
+            Requirement[] requirements = new Requirement[entry.length - 1];
+            for (int i = 1; i < entry.length; i++)
+            {
+                String[] req = entry[i].split(":");
+
+                if (req[0].equalsIgnoreCase("defense"))
+                    req[0] = "defence";
+
+                requirements[i - 1] = new Requirement(Skill.valueOf(req[0].toUpperCase()), Integer.parseInt(req[1]));
+            }
+
+            skillLocks.put(new ResourceLocation(entry[0]), requirements);
+        });
+    }
+
+    public void encode(CompoundNBT nbt)
+    {
+        nbt.putBoolean("disable_wool", disableWool);
+        nbt.putBoolean("death_reset", deathReset);
+        nbt.putBoolean("use_skill_fragments", useSkillFragments);
+        nbt.putInt("skill_fragments_from_task", skillFragmentsFromTask);
+        nbt.putInt("skill_fragments_from_goal", skillFragmentsFromGoal);
+        nbt.putInt("skill_fragments_from_challenge", skillFragmentsFromChallenge);
+        nbt.putInt("starting_cost", startingCost);
+        nbt.putInt("cost_increase", costIncrease);
+        nbt.putInt("max_level", maxLevel);
+
+        ListNBT skillLocksNBT = new ListNBT();
+        skillLocks.forEach(((resourceLocation, requirements) ->
+        {
+            StringBuilder stringBuilder = new StringBuilder(resourceLocation.toString());
+            for (Requirement requirement : requirements)
+                stringBuilder.append(" ").append(requirement.toString());
+
+            skillLocksNBT.add(StringNBT.valueOf(stringBuilder.toString()));
+        }));
+
+        nbt.put("skill_locks", skillLocksNBT);
+    }
+
     public static void register()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG_SPEC);
@@ -72,11 +146,21 @@ public class Config
     
     public static void load()
     {
+        config = new Config();
+        config.disableWool = DISABLE_WOOL.get();
+        config.deathReset = DEATH_RESET.get();
+        config.useSkillFragments = USE_SKILL_FRAGMENTS.get();
+        config.skillFragmentsFromTask = SKILL_FRAGMENTS_FROM_ADVANCEMENTS_TASK.get();
+        config.skillFragmentsFromGoal = SKILL_FRAGMENTS_FROM_ADVANCEMENTS_GOAL.get();
+        config.skillFragmentsFromChallenge = SKILL_FRAGMENTS_FROM_ADVANCEMENTS_CHALLENGE.get();
+        config.startingCost = STARTING_COST.get();
+        config.costIncrease = COST_INCREASE.get();
+        config.maxLevel = MAXIMUM_LEVEL.get();
+
         for (String line : SKILL_LOCKS.get())
         {
             String[] entry = line.split(" ");
             Requirement[] requirements = new Requirement[entry.length - 1];
-            
             for (int i = 1; i < entry.length; i++)
             {
                 String[] req = entry[i].split(":");
@@ -87,57 +171,67 @@ public class Config
                 requirements[i - 1] = new Requirement(Skill.valueOf(req[0].toUpperCase()), Integer.parseInt(req[1]));
             }
             
-            skillLocks.put(entry[0], requirements);
+            config.skillLocks.put(new ResourceLocation(entry[0]), requirements);
         }
     }
-    
+
+    public static void set(Config config)
+    {
+        Config.config = config;
+    }
+
+    public static Config get()
+    {
+        return config;
+    }
+
     public static boolean getDisableWool()
     {
-        return DISABLE_WOOL.get();
+        return config.disableWool;
     }
     
     public static boolean getDeathReset()
     {
-        return DEATH_RESET.get();
+        return config.deathReset;
     }
 
     public static boolean getUseSkillFragments()
     {
-        return USE_SKILL_FRAGMENTS.get();
+        return config.useSkillFragments;
     }
 
     public static int getSkillFragmentsFromTaskAdvancements()
     {
-        return SKILL_FRAGMENTS_FROM_ADVANCEMENTS_TASK.get();
+        return config.skillFragmentsFromTask;
     }
 
     public static int getSkillFragmentsFromChallengeAdvancements()
     {
-        return SKILL_FRAGMENTS_FROM_ADVANCEMENTS_CHALLENGE.get();
+        return config.skillFragmentsFromChallenge;
     }
 
     public static int getSkillFragmentsFromGoalAdvancements()
     {
-        return SKILL_FRAGMENTS_FROM_ADVANCEMENTS_GOAL.get();
+        return config.skillFragmentsFromGoal;
     }
     
     public static int getStartCost()
     {
-        return STARTING_COST.get();
+        return config.startingCost;
     }
     
     public static int getCostIncrease()
     {
-        return COST_INCREASE.get();
+        return config.costIncrease;
     }
     
     public static int getMaxLevel()
     {
-        return MAXIMUM_LEVEL.get();
+        return config.maxLevel;
     }
     
     public static Requirement[] getRequirements(ResourceLocation key)
     {
-        return skillLocks.get(key.toString());
+        return config.skillLocks.get(key);
     }
 }

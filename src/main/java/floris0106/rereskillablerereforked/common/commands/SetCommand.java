@@ -7,7 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import floris0106.rereskillablerereforked.common.Config;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
-import floris0106.rereskillablerereforked.common.network.SyncToClient;
+import floris0106.rereskillablerereforked.common.network.SyncSkills;
 import floris0106.rereskillablerereforked.common.skills.Skill;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -35,7 +35,7 @@ public class SetCommand implements Command<CommandSource>
         int level = IntegerArgumentType.getInteger(context, "level");
 
         SkillModel.get(player).setSkillLevel(skill, level);
-        SyncToClient.send(player);
+        SyncSkills.send(player);
 
         return 1;
     }

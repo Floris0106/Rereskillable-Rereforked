@@ -10,4 +10,9 @@ public class Requirement
         this.skill = skill;
         this.level = level;
     }
+
+    public String toString()
+    {
+        return skill + ":" + level;
+    }
 }

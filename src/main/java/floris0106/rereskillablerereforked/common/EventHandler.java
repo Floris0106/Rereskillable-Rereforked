@@ -3,7 +3,8 @@ package floris0106.rereskillablerereforked.common;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
 import floris0106.rereskillablerereforked.common.capabilities.SkillProvider;
 import floris0106.rereskillablerereforked.common.item.Items;
-import floris0106.rereskillablerereforked.common.network.SyncToClient;
+import floris0106.rereskillablerereforked.common.network.SyncConfig;
+import floris0106.rereskillablerereforked.common.network.SyncSkills;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -23,8 +24,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.Objects;
 
 public class EventHandler
 {
@@ -188,22 +187,23 @@ public class EventHandler
     {
         SkillModel.get(event.getPlayer()).skillLevels = SkillModel.get(event.getOriginal()).skillLevels;
     }
-    
+
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent e)
     {
-        SyncToClient.send(e.getPlayer());
+        SyncSkills.send(e.getPlayer());
+        SyncConfig.send(e.getPlayer());
     }
     
     @SubscribeEvent
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent e)
     {
-        SyncToClient.send(e.getPlayer());
+        SyncSkills.send(e.getPlayer());
     }
     
     @SubscribeEvent
     public void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent e)
     {
-        SyncToClient.send(e.getPlayer());
+        SyncSkills.send(e.getPlayer());
     }
 }

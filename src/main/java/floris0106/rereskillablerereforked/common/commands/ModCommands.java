@@ -5,7 +5,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class Commands
+public class ModCommands
 {
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event)

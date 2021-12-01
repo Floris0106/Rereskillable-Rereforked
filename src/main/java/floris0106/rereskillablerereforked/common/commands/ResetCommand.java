@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
-import floris0106.rereskillablerereforked.common.network.SyncToClient;
+import floris0106.rereskillablerereforked.common.network.SyncSkills;
 import floris0106.rereskillablerereforked.common.skills.Skill;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.arguments.EntityArgument;
@@ -29,7 +29,7 @@ public class ResetCommand implements Command<CommandSource>
         for (Skill skill : Skill.values())
             SkillModel.get(player).setSkillLevel(skill, 1);
 
-        SyncToClient.send(player);
+        SyncSkills.send(player);
 
         return 1;
     }

@@ -1,7 +1,7 @@
 package floris0106.rereskillablerereforked.common.capabilities;
 
 import floris0106.rereskillablerereforked.common.Config;
-import floris0106.rereskillablerereforked.common.network.NotifyWarning;
+import floris0106.rereskillablerereforked.common.network.SkillWarning;
 import floris0106.rereskillablerereforked.common.skills.Requirement;
 import floris0106.rereskillablerereforked.common.skills.Skill;
 import net.minecraft.block.Block;
@@ -60,7 +60,7 @@ public class SkillModel implements INBTSerializable<CompoundNBT>
                 {
                     if (player instanceof ServerPlayerEntity)
                     {
-                        NotifyWarning.send(player, resource);
+                        SkillWarning.send(player, resource);
                     }
                 
                     return false;

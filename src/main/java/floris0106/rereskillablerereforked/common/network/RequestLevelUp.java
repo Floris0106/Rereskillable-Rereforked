@@ -7,7 +7,6 @@ import floris0106.rereskillablerereforked.common.item.Items;
 import floris0106.rereskillablerereforked.common.skills.Skill;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -54,7 +53,7 @@ public class RequestLevelUp
 
                         skillModel.increaseSkillLevel(skill);
 
-                        SyncToClient.send(player);
+                        SyncSkills.send(player);
                     }
                 }
                 else
@@ -66,7 +65,7 @@ public class RequestLevelUp
 
                         skillModel.increaseSkillLevel(skill);
 
-                        SyncToClient.send(player);
+                        SyncSkills.send(player);
                     }
                 }
             }
@@ -77,6 +76,6 @@ public class RequestLevelUp
     
     public static void send(Skill skill)
     {
-        RereskillableRereforked.NETWORK.sendToServer(new RequestLevelUp(skill));
+        RereskillableRereforked.network.sendToServer(new RequestLevelUp(skill));
     }
 }
