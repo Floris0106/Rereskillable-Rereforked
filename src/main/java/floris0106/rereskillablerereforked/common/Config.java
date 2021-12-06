@@ -21,6 +21,7 @@ public class Config
     private static final ForgeConfigSpec.BooleanValue DISABLE_WOOL;
     private static final ForgeConfigSpec.BooleanValue DEATH_RESET;
     private static final ForgeConfigSpec.BooleanValue USE_SKILL_FRAGMENTS;
+    private static final ForgeConfigSpec.BooleanValue USE_XP_POINTS;
     private static final ForgeConfigSpec.IntValue SKILL_FRAGMENTS_FROM_ADVANCEMENTS_TASK;
     private static final ForgeConfigSpec.IntValue SKILL_FRAGMENTS_FROM_ADVANCEMENTS_CHALLENGE;
     private static final ForgeConfigSpec.IntValue SKILL_FRAGMENTS_FROM_ADVANCEMENTS_GOAL;
@@ -33,7 +34,8 @@ public class Config
 
     private boolean disableWool = true;
     private boolean deathReset = false;
-    private boolean useSkillFragments = true;
+    private boolean useSkillFragments = false;
+    private boolean useXpPoints = false;
     private int skillFragmentsFromTask = 1;
     private int skillFragmentsFromGoal = 2;
     private int skillFragmentsFromChallenge = 3;
@@ -54,6 +56,10 @@ public class Config
 
         builder.comment("Use skill fragments as the way of leveling up skills instead of XP levels.");
         USE_SKILL_FRAGMENTS = builder.define("useSkillFragments", false);
+
+        builder.comment("Use XP points to level up instead of XP levels.");
+        builder.comment("This makes it so that when you level up from a higher level, no more XP points will be consumed than when levelling up from a lower level");
+        USE_XP_POINTS = builder.define("useXpPoints", false);
 
         builder.comment("Amount of skill fragments obtained by completing task advancements.");
         SKILL_FRAGMENTS_FROM_ADVANCEMENTS_TASK = builder.defineInRange("skillFragmentsFromTasks", 1, 0, 64);
@@ -86,6 +92,7 @@ public class Config
         disableWool = nbt.getBoolean("disable_wool");
         deathReset = nbt.getBoolean("death_reset");
         useSkillFragments = nbt.getBoolean("use_skill_fragments");
+        useXpPoints = nbt.getBoolean("use_xp_points");
         skillFragmentsFromTask = nbt.getInt("skill_fragments_from_task");
         skillFragmentsFromGoal = nbt.getInt("skill_fragments_from_goal");
         skillFragmentsFromChallenge = nbt.getInt("skill_fragments_from_challenge");
@@ -119,6 +126,7 @@ public class Config
         nbt.putBoolean("disable_wool", disableWool);
         nbt.putBoolean("death_reset", deathReset);
         nbt.putBoolean("use_skill_fragments", useSkillFragments);
+        nbt.putBoolean("use_xp_points", useXpPoints);
         nbt.putInt("skill_fragments_from_task", skillFragmentsFromTask);
         nbt.putInt("skill_fragments_from_goal", skillFragmentsFromGoal);
         nbt.putInt("skill_fragments_from_challenge", skillFragmentsFromChallenge);
@@ -150,6 +158,7 @@ public class Config
         config.disableWool = DISABLE_WOOL.get();
         config.deathReset = DEATH_RESET.get();
         config.useSkillFragments = USE_SKILL_FRAGMENTS.get();
+        config.useXpPoints = USE_XP_POINTS.get();
         config.skillFragmentsFromTask = SKILL_FRAGMENTS_FROM_ADVANCEMENTS_TASK.get();
         config.skillFragmentsFromGoal = SKILL_FRAGMENTS_FROM_ADVANCEMENTS_GOAL.get();
         config.skillFragmentsFromChallenge = SKILL_FRAGMENTS_FROM_ADVANCEMENTS_CHALLENGE.get();
@@ -198,6 +207,11 @@ public class Config
     public static boolean getUseSkillFragments()
     {
         return config.useSkillFragments;
+    }
+
+    public static boolean getUseXpPoints()
+    {
+        return config.useXpPoints;
     }
 
     public static int getSkillFragmentsFromTaskAdvancements()

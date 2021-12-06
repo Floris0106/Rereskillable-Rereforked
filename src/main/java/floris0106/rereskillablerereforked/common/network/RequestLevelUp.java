@@ -41,6 +41,9 @@ public class RequestLevelUp
             
             int cost = Config.getStartCost() + (skillModel.getSkillLevel(skill) - 1) * Config.getCostIncrease();
 
+            if (Config.getUseXpPoints())
+                cost = getXpNeededForLevel(cost);
+
             if (skillModel.getSkillLevel(skill) < Config.getMaxLevel())
             {
                 if (Config.getUseSkillFragments())
@@ -58,10 +61,14 @@ public class RequestLevelUp
                 }
                 else
                 {
-                    if (player.isCreative() || player.experienceLevel >= cost)
+                    int xp = Config.getUseXpPoints() ? player.totalExperience : player.experienceLevel;
+                    if (player.isCreative() || xp >= cost)
                     {
                         if (!player.isCreative())
-                            player.giveExperienceLevels(-cost);
+                            if (Config.getUseXpPoints())
+                                player.giveExperiencePoints(-cost);
+                            else
+                                player.giveExperienceLevels(-cost);
 
                         skillModel.increaseSkillLevel(skill);
 
@@ -72,6 +79,18 @@ public class RequestLevelUp
         });
         
         context.get().setPacketHandled(true);
+    }
+
+    private static int getXpNeededForLevel(int level)
+    {
+        int xp = 0;
+        for (int i = 0; i < level; i++)
+            if (level >= 30)
+                xp += 112 + (level - 30) * 9;
+            else
+                xp += level >= 15 ? 37 + (level - 15) * 5 : 7 + level * 2;
+
+        return xp;
     }
     
     public static void send(Skill skill)
