@@ -2,10 +2,10 @@ package floris0106.rereskillablerereforked.common;
 
 import floris0106.rereskillablerereforked.common.skills.Requirement;
 import floris0106.rereskillablerereforked.common.skills.Skill;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
@@ -87,7 +87,7 @@ public class Config
 
     public Config() { }
 
-    public Config(CompoundNBT nbt)
+    public Config(CompoundTag nbt)
     {
         disableWool = nbt.getBoolean("disable_wool");
         deathReset = nbt.getBoolean("death_reset");
@@ -100,10 +100,10 @@ public class Config
         costIncrease = nbt.getInt("cost_increase");
         maxLevel = nbt.getInt("max_level");
 
-        ListNBT skillLocksNBT = nbt.getList("skill_locks", 8);
+        ListTag skillLocksNBT = nbt.getList("skill_locks", 8);
         skillLocksNBT.forEach(skillLock ->
         {
-            StringNBT string = (StringNBT)skillLock;
+            StringTag string = (StringTag)skillLock;
 
             String[] entry = string.getAsString().split(" ");
             Requirement[] requirements = new Requirement[entry.length - 1];
@@ -121,7 +121,7 @@ public class Config
         });
     }
 
-    public void encode(CompoundNBT nbt)
+    public void encode(CompoundTag nbt)
     {
         nbt.putBoolean("disable_wool", disableWool);
         nbt.putBoolean("death_reset", deathReset);
@@ -134,14 +134,14 @@ public class Config
         nbt.putInt("cost_increase", costIncrease);
         nbt.putInt("max_level", maxLevel);
 
-        ListNBT skillLocksNBT = new ListNBT();
+        ListTag skillLocksNBT = new ListTag();
         skillLocks.forEach(((resourceLocation, requirements) ->
         {
             StringBuilder stringBuilder = new StringBuilder(resourceLocation.toString());
             for (Requirement requirement : requirements)
                 stringBuilder.append(" ").append(requirement.toString());
 
-            skillLocksNBT.add(StringNBT.valueOf(stringBuilder.toString()));
+            skillLocksNBT.add(StringTag.valueOf(stringBuilder.toString()));
         }));
 
         nbt.put("skill_locks", skillLocksNBT);

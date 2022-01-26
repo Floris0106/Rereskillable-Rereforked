@@ -2,12 +2,12 @@ package floris0106.rereskillablerereforked.common.network;
 
 import floris0106.rereskillablerereforked.RereskillableRereforked;
 import floris0106.rereskillablerereforked.client.Overlay;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
@@ -20,12 +20,12 @@ public class SkillWarning
         this.resource = resource;
     }
     
-    public SkillWarning(PacketBuffer buffer)
+    public SkillWarning(FriendlyByteBuf buffer)
     {
         resource = buffer.readResourceLocation();
     }
     
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeResourceLocation(resource);
     }
@@ -36,8 +36,8 @@ public class SkillWarning
         context.get().setPacketHandled(true);
     }
     
-    public static void send(PlayerEntity player, ResourceLocation resource)
+    public static void send(Player player, ResourceLocation resource)
     {
-        RereskillableRereforked.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new SkillWarning(resource));
+        RereskillableRereforked.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new SkillWarning(resource));
     }
 }

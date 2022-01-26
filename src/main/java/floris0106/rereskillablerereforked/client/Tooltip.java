@@ -3,11 +3,11 @@ package floris0106.rereskillablerereforked.client;
 import floris0106.rereskillablerereforked.common.Config;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
 import floris0106.rereskillablerereforked.common.skills.Requirement;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -24,14 +24,14 @@ public class Tooltip
     
             if (requirements != null)
             {
-                List<ITextComponent> tooltips = event.getToolTip();
-                tooltips.add(StringTextComponent.EMPTY);
-                tooltips.add(new TranslationTextComponent("tooltip.requirements").append(":").withStyle(TextFormatting.GRAY));
+                List<Component> tooltips = event.getToolTip();
+                tooltips.add(TextComponent.EMPTY);
+                tooltips.add(new TranslatableComponent("tooltip.requirements").append(":").withStyle(ChatFormatting.GRAY));
         
                 for (Requirement requirement : requirements)
                 {
-                    TextFormatting colour = SkillModel.get().getSkillLevel(requirement.skill) >= requirement.level ? TextFormatting.GREEN : TextFormatting.RED;
-                    tooltips.add(new TranslationTextComponent(requirement.skill.displayName).append(" " + requirement.level).withStyle(colour));
+                    ChatFormatting colour = SkillModel.get().getSkillLevel(requirement.skill) >= requirement.level ? ChatFormatting.GREEN : ChatFormatting.RED;
+                    tooltips.add(new TranslatableComponent(requirement.skill.displayName).append(" " + requirement.level).withStyle(colour));
                 }
             }
         }
