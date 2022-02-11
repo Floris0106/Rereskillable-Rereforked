@@ -1,6 +1,7 @@
 package floris0106.rereskillablerereforked.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import floris0106.rereskillablerereforked.common.Config;
 import floris0106.rereskillablerereforked.client.screen.SkillScreen;
 import floris0106.rereskillablerereforked.common.capabilities.SkillCapability;
@@ -43,7 +44,7 @@ public class Overlay extends AbstractGui
                 blit(stack, cx - 71, cy - 4, 0, 194, 142, 40);
     
                 String message = new TranslationTextComponent("overlay.message").getString();
-                minecraft.font.drawShadow(stack, message, cx - minecraft.font.width(message) / 2, cy, 0xFF5555);
+                minecraft.font.drawShadow(stack, message, (cx - minecraft.font.width(message)) / 2f, cy, 0xFF5555);
     
                 for (int i = 0; i < requirements.size(); i++)
                 {

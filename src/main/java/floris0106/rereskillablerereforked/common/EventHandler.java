@@ -24,6 +24,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import sun.security.pkcs11.wrapper.CK_INFO;
 
 public class EventHandler
 {
@@ -131,9 +132,14 @@ public class EventHandler
     @SubscribeEvent
     public void onPlayerDeath(LivingDeathEvent event)
     {
-        if (Config.getDeathReset() && event.getEntity() instanceof PlayerEntity)
+        if (event.getEntity() instanceof PlayerEntity)
         {
-            SkillModel.get((PlayerEntity) event.getEntity()).skillLevels = new int[]{1, 1, 1, 1, 1, 1, 1, 1};
+            PlayerEntity player = (PlayerEntity) event.getEntity();
+            for (int i = 0; i < 8; i++)
+            {
+                SkillModel.get(player).skillLevels[i] -= player.getRandom().nextInt(Config.getDeathLevelLossMax() + 1 - Config.getDeathLevelLossMin());
+                SkillModel.get(player).skillLevels[i] = Math.max(SkillModel.get(player).skillLevels[i] - Config.getDeathLevelLossMin(), 1);
+            }
         }
     }
     
