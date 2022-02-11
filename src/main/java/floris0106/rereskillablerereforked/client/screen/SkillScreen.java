@@ -1,12 +1,12 @@
 package floris0106.rereskillablerereforked.client.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import floris0106.rereskillablerereforked.client.screen.buttons.SkillButton;
 import floris0106.rereskillablerereforked.common.skills.Skill;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 public class SkillScreen extends Screen
 {
@@ -14,7 +14,7 @@ public class SkillScreen extends Screen
     
     public SkillScreen()
     {
-        super(new TranslationTextComponent("container.skills"));
+        super(new TranslatableComponent("container.skills"));
     }
     
     @Override
@@ -27,23 +27,23 @@ public class SkillScreen extends Screen
         {
             int x = left + i % 2 * 83;
             int y = top + i / 2 * 36;
-            
-            addButton(new SkillButton(x, y, Skill.values()[i]));
+
+            addRenderableWidget(new SkillButton(x, y, Skill.values()[i]));
         }
     }
     
     @Override
-    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks)
     {
-        Minecraft.getInstance().textureManager.bind(RESOURCES);
+        RenderSystem.setShaderTexture(0, RESOURCES);
         
         int left = (width - 176) / 2;
         int top = (height - 166) / 2;
         
         renderBackground(stack);
-        
+
         blit(stack, left, top, 0, 0, 176, 166);
-        font.draw(stack, title, width / 2 - font.width(title) / 2, top + 6, 0x3F3F3F);
+        font.draw(stack, title, (width - font.width(title)) / 2f, top + 6, 0x3F3F3F);
         
         super.render(stack, mouseX, mouseY, partialTicks);
     }

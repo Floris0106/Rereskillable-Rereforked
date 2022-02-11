@@ -2,12 +2,12 @@ package floris0106.rereskillablerereforked.common.network;
 
 import floris0106.rereskillablerereforked.RereskillableRereforked;
 import floris0106.rereskillablerereforked.common.Config;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
@@ -20,16 +20,16 @@ public class SyncConfig
         this.config = config;
     }
 
-    public SyncConfig(PacketBuffer buffer)
+    public SyncConfig(FriendlyByteBuf buffer)
     {
         config = new Config(buffer.readNbt());
     }
 
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         System.out.println("encode");
 
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         Config.get().encode(nbt);
         buffer.writeNbt(nbt);
     }
@@ -40,8 +40,8 @@ public class SyncConfig
         context.get().setPacketHandled(true);
     }
 
-    public static void send(PlayerEntity player)
+    public static void send(Player player)
     {
-        RereskillableRereforked.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new SyncConfig(Config.get()));
+        RereskillableRereforked.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new SyncConfig(Config.get()));
     }
 }

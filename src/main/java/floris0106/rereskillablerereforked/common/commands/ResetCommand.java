@@ -7,24 +7,25 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
 import floris0106.rereskillablerereforked.common.network.SyncSkills;
 import floris0106.rereskillablerereforked.common.skills.Skill;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.server.level.ServerPlayer;
 
-public class ResetCommand implements Command<CommandSource>
+public class ResetCommand implements Command<CommandSourceStack>
 {
     private static final ResetCommand COMMAND = new ResetCommand();
 
-    static ArgumentBuilder<CommandSource, ?> register()
+    static ArgumentBuilder<CommandSourceStack, ?> register()
     {
-        return net.minecraft.command.Commands.literal("reset")
+        return Commands.literal("reset")
                 .executes(COMMAND);
     }
 
     @Override
-    public int run(CommandContext<CommandSource> context) throws CommandSyntaxException
+    public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
     {
-        ServerPlayerEntity player = EntityArgument.getPlayer(context, "player");
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
 
         for (Skill skill : Skill.values())
             SkillModel.get(player).setSkillLevel(skill, 1);

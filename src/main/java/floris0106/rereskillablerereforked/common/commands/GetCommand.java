@@ -6,18 +6,18 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
 import floris0106.rereskillablerereforked.common.skills.Skill;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.command.EnumArgument;
 
-public class GetCommand implements Command<CommandSource>
+public class GetCommand implements Command<CommandSourceStack>
 {
     private static final GetCommand COMMAND = new GetCommand();
 
-    static ArgumentBuilder<CommandSource, ?> register()
+    static ArgumentBuilder<CommandSourceStack, ?> register()
     {
         return Commands.literal("get")
             .then(Commands.argument("skill", EnumArgument.enumArgument(Skill.class))
@@ -25,13 +25,13 @@ public class GetCommand implements Command<CommandSource>
     }
 
     @Override
-    public int run(CommandContext<CommandSource> context) throws CommandSyntaxException
+    public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
     {
-        ServerPlayerEntity player = EntityArgument.getPlayer(context, "player");
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
         Skill skill = context.getArgument("skill", Skill.class);
         int level = SkillModel.get(player).getSkillLevel(skill);
 
-        context.getSource().sendSuccess(new TranslationTextComponent(skill.displayName).append(" " + level), true);
+        context.getSource().sendSuccess(new TranslatableComponent(skill.displayName).append(" " + level), true);
 
         return 1;
     }

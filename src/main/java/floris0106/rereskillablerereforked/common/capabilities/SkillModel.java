@@ -4,17 +4,17 @@ import floris0106.rereskillablerereforked.common.Config;
 import floris0106.rereskillablerereforked.common.network.SkillWarning;
 import floris0106.rereskillablerereforked.common.skills.Requirement;
 import floris0106.rereskillablerereforked.common.skills.Skill;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class SkillModel implements INBTSerializable<CompoundNBT>
+public class SkillModel implements INBTSerializable<CompoundTag>
 {
     public int[] skillLevels = new int[]{1, 1, 1, 1, 1, 1, 1, 1};
     
@@ -33,22 +33,22 @@ public class SkillModel implements INBTSerializable<CompoundNBT>
         skillLevels[skill.index]++;
     }
 
-    public boolean canUseItem(PlayerEntity player, ItemStack item)
+    public boolean canUseItem(Player player, ItemStack item)
     {
         return canUse(player, item.getItem().getRegistryName());
     }
     
-    public boolean canUseBlock(PlayerEntity player, Block block)
+    public boolean canUseBlock(Player player, Block block)
     {
-        return canUse(player, block.getBlock().getRegistryName());
+        return canUse(player, block.getRegistryName());
     }
     
-    public boolean canUseEntity(PlayerEntity player, Entity entity)
+    public boolean canUseEntity(Player player, Entity entity)
     {
         return canUse(player, entity.getType().getRegistryName());
     }
     
-    private boolean canUse(PlayerEntity player, ResourceLocation resource)
+    private boolean canUse(Player player, ResourceLocation resource)
     {
         Requirement[] requirements = Config.getRequirements(resource);
         
@@ -58,7 +58,7 @@ public class SkillModel implements INBTSerializable<CompoundNBT>
             {
                 if (getSkillLevel(requirement.skill) < requirement.level)
                 {
-                    if (player instanceof ServerPlayerEntity)
+                    if (player instanceof ServerPlayer)
                     {
                         SkillWarning.send(player, resource);
                     }
@@ -71,7 +71,7 @@ public class SkillModel implements INBTSerializable<CompoundNBT>
         return true;
     }
     
-    public static SkillModel get(PlayerEntity player)
+    public static SkillModel get(Player player)
     {
         return player.getCapability(SkillCapability.INSTANCE).orElseThrow(() ->
             new IllegalArgumentException("Player " + player.getName().getContents() + " does not have a Skill Model!")
@@ -86,9 +86,9 @@ public class SkillModel implements INBTSerializable<CompoundNBT>
     }
     
     @Override
-    public CompoundNBT serializeNBT()
+    public CompoundTag serializeNBT()
     {
-        CompoundNBT compound = new CompoundNBT();
+        CompoundTag compound = new CompoundTag();
         compound.putInt("mining", skillLevels[0]);
         compound.putInt("gathering", skillLevels[1]);
         compound.putInt("attack", skillLevels[2]);
@@ -102,7 +102,7 @@ public class SkillModel implements INBTSerializable<CompoundNBT>
     }
     
     @Override
-    public void deserializeNBT(CompoundNBT nbt)
+    public void deserializeNBT(CompoundTag nbt)
     {
         skillLevels[0] = nbt.getInt("mining");
         skillLevels[1] = nbt.getInt("gathering");
