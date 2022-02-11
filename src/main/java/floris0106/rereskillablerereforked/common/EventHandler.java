@@ -136,9 +136,13 @@ public class EventHandler
     @SubscribeEvent
     public void onPlayerDeath(LivingDeathEvent event)
     {
-        if (Config.getDeathReset() && event.getEntity() instanceof Player)
+        if (event.getEntity() instanceof Player player)
         {
-            SkillModel.get((Player) event.getEntity()).skillLevels = new int[]{1, 1, 1, 1, 1, 1, 1, 1};
+            for (int i = 0; i < 8; i++)
+            {
+                SkillModel.get(player).skillLevels[i] -= player.getRandom().nextInt(Config.getDeathLevelLossMax() + 1 - Config.getDeathLevelLossMin());
+                SkillModel.get(player).skillLevels[i] = Math.max(SkillModel.get(player).skillLevels[i] - Config.getDeathLevelLossMin(), 1);
+            }
         }
     }
 
