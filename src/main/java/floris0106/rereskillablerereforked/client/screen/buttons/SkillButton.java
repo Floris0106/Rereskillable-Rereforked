@@ -1,5 +1,6 @@
 package floris0106.rereskillablerereforked.client.screen.buttons;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import floris0106.rereskillablerereforked.common.Config;
 import floris0106.rereskillablerereforked.client.screen.SkillScreen;
@@ -29,7 +30,7 @@ public class SkillButton extends AbstractButton
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.textureManager.bindForSetup(SkillScreen.RESOURCES);
+        RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
     
         int level = SkillModel.get().getSkillLevel(skill);
         int maxLevel = Config.getMaxLevel();
@@ -61,7 +62,7 @@ public class SkillButton extends AbstractButton
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput p_169152_)
+    public void updateNarration(NarrationElementOutput output)
     {
 
     }

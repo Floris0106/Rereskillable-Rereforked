@@ -58,7 +58,7 @@ public class Config
         USE_SKILL_FRAGMENTS = builder.define("useSkillFragments", false);
 
         builder.comment("Use XP points to level up instead of XP levels.");
-        builder.comment("This makes it so that when you level up from a higher level, no more XP points will be consumed than when levelling up from a lower level");
+        builder.comment("This makes it so that when you level up from a higher level, no more XP points will be consumed than when leveling up from a lower level");
         USE_XP_POINTS = builder.define("useXpPoints", false);
 
         builder.comment("Amount of skill fragments obtained by completing task advancements.");

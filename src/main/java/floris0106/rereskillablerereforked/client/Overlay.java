@@ -1,5 +1,6 @@
 package floris0106.rereskillablerereforked.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import floris0106.rereskillablerereforked.common.Config;
 import floris0106.rereskillablerereforked.client.screen.SkillScreen;
@@ -33,17 +34,15 @@ public class Overlay extends GuiComponent
             if (minecraft.player.getCapability(SkillCapability.INSTANCE).isPresent())
             {
                 PoseStack stack = event.getMatrixStack();
-    
-                minecraft.textureManager.bindForSetup(SkillScreen.RESOURCES);
+
+                RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
                 GL11.glEnable(GL11.GL_BLEND);
     
                 int cx = event.getWindow().getGuiScaledWidth() / 2;
                 int cy = event.getWindow().getGuiScaledHeight() / 4;
     
-                blit(stack, cx - 71, cy - 4, 0, 194, 142, 40);
-    
                 String message = new TranslatableComponent("overlay.message").getString();
-                minecraft.font.drawShadow(stack, message, cx - minecraft.font.width(message) / 2, cy, 0xFF5555);
+                minecraft.font.drawShadow(stack, message, cx - minecraft.font.width(message) / 2f, cy, 0xFF5555);
     
                 for (int i = 0; i < requirements.size(); i++)
                 {
@@ -54,8 +53,7 @@ public class Overlay extends GuiComponent
                     int y = cy + 15;
                     int u = Math.min(requirement.level, maxLevel - 1) / (maxLevel / 4) * 16 + 176;
                     int v = requirement.skill.index * 16 + 128;
-        
-                    minecraft.textureManager.bindForSetup(SkillScreen.RESOURCES);
+
                     blit(stack, x, y, u, v, 16, 16);
         
                     String level = Integer.toString(requirement.level);
@@ -69,7 +67,8 @@ public class Overlay extends GuiComponent
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event)
     {
-        if (showTicks > 0) showTicks--;
+        if (showTicks > 0)
+            showTicks--;
     }
     
     public static void showWarning(ResourceLocation resource)

@@ -1,5 +1,6 @@
 package floris0106.rereskillablerereforked.client.screen.buttons;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import floris0106.rereskillablerereforked.client.screen.SkillScreen;
 import net.minecraft.client.Minecraft;
@@ -29,7 +30,7 @@ public class TabButton extends AbstractButton
         
         if (active)
         {
-            minecraft.textureManager.bindForSetup(SkillScreen.RESOURCES);
+            RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
     
             blit(stack, x, y, selected ? 31 : 0, 166, width, height);
             blit(stack, x + (selected ? 8 : 10), y + 6, 240, 128 + type.iconIndex * 16, 16, 16);
@@ -40,16 +41,11 @@ public class TabButton extends AbstractButton
     public void onPress()
     {
         Minecraft minecraft = Minecraft.getInstance();
-        
+
         switch (type)
         {
-            case INVENTORY:
-                minecraft.setScreen(new InventoryScreen(minecraft.player));
-                break;
-                
-            case SKILLS:
-                minecraft.setScreen(new SkillScreen());
-                break;
+            case INVENTORY -> minecraft.setScreen(new InventoryScreen(minecraft.player));
+            case SKILLS -> minecraft.setScreen(new SkillScreen());
         }
     }
 
