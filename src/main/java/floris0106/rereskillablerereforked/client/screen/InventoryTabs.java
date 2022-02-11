@@ -1,33 +1,33 @@
 package floris0106.rereskillablerereforked.client.screen;
 
 import floris0106.rereskillablerereforked.client.screen.buttons.TabButton;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.inventory.CreativeScreen;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class InventoryTabs
 {
     @SubscribeEvent
-    public void onInitGui(ScreenEvent.InitScreenEvent event)
+    public void onInitGui(GuiScreenEvent.InitGuiEvent event)
     {
-        Screen screen = event.getScreen();
+        Screen screen = event.getGui();
         
-        if (screen instanceof InventoryScreen || screen instanceof CreativeModeInventoryScreen || screen instanceof SkillScreen)
+        if (screen instanceof InventoryScreen || screen instanceof CreativeScreen || screen instanceof SkillScreen)
         {
-            boolean creativeOpen = screen instanceof CreativeModeInventoryScreen;
+            boolean creativeOpen = screen instanceof CreativeScreen;
             boolean skillsOpen = screen instanceof SkillScreen;
             int x = (screen.width - (creativeOpen ? 195 : 176)) / 2 - 28;
             int y = (screen.height - (creativeOpen ? 136 : 166)) / 2;
-
-            event.addListener(new TabButton(x, y + 7, TabButton.TabType.INVENTORY, !skillsOpen));
-            event.addListener(new TabButton(x, y + 36, TabButton.TabType.SKILLS, skillsOpen));
+            
+            event.addWidget(new TabButton(x, y + 7, TabButton.TabType.INVENTORY, !skillsOpen));
+            event.addWidget(new TabButton(x, y + 36, TabButton.TabType.SKILLS, skillsOpen));
         }
     }
     
     @SubscribeEvent
-    public void onPotionShift(ScreenEvent.PotionShiftEvent event)
+    public void onPotionShift(GuiScreenEvent.PotionShiftEvent event)
     {
         event.setCanceled(true);
     }

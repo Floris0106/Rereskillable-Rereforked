@@ -1,10 +1,10 @@
 package floris0106.rereskillablerereforked.common.capabilities;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public class SkillCapability
 {
-    public static Capability<SkillModel> INSTANCE = CapabilityManager.get(new CapabilityToken<>() { });
+    @CapabilityInject(SkillModel.class)
+    public static Capability<SkillModel> INSTANCE;
 }

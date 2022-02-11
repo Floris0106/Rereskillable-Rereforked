@@ -9,17 +9,17 @@ import floris0106.rereskillablerereforked.common.Config;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
 import floris0106.rereskillablerereforked.common.network.SyncSkills;
 import floris0106.rereskillablerereforked.common.skills.Skill;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.server.command.EnumArgument;
 
-public class SetCommand implements Command<CommandSourceStack>
+public class SetCommand implements Command<CommandSource>
 {
     private static final SetCommand COMMAND = new SetCommand();
 
-    static ArgumentBuilder<CommandSourceStack, ?> register()
+    static ArgumentBuilder<CommandSource, ?> register()
     {
         return Commands.literal("set")
             .then(Commands.argument("skill", EnumArgument.enumArgument(Skill.class))
@@ -28,9 +28,9 @@ public class SetCommand implements Command<CommandSourceStack>
     }
 
     @Override
-    public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
+    public int run(CommandContext<CommandSource> context) throws CommandSyntaxException
     {
-        ServerPlayer player = EntityArgument.getPlayer(context, "player");
+        ServerPlayerEntity player = EntityArgument.getPlayer(context, "player");
         Skill skill = context.getArgument("skill", Skill.class);
         int level = IntegerArgumentType.getInteger(context, "level");
 

@@ -5,10 +5,10 @@ import floris0106.rereskillablerereforked.RereskillableRereforked;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
 import floris0106.rereskillablerereforked.common.item.Items;
 import floris0106.rereskillablerereforked.common.skills.Skill;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.ContainerHelper;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -21,12 +21,12 @@ public class RequestLevelUp
         this.skill = skill.index;
     }
     
-    public RequestLevelUp(FriendlyByteBuf buffer)
+    public RequestLevelUp(PacketBuffer buffer)
     {
         skill = buffer.readInt();
     }
     
-    public void encode(FriendlyByteBuf buffer)
+    public void encode(PacketBuffer buffer)
     {
         buffer.writeInt(skill);
     }
@@ -35,7 +35,7 @@ public class RequestLevelUp
     {
         context.get().enqueueWork(() ->
         {
-            ServerPlayer player = context.get().getSender();
+            ServerPlayerEntity player = context.get().getSender();
             SkillModel skillModel = SkillModel.get(player);
             Skill skill = Skill.values()[this.skill];
             
@@ -48,11 +48,11 @@ public class RequestLevelUp
             {
                 if (Config.getUseSkillFragments())
                 {
-                    int fragments = ContainerHelper.clearOrCountMatchingItems(player.getInventory(), stack -> stack.getItem() == Items.SKILL_FRAGMENT.get(), 0, true);
+                    int fragments = ItemStackHelper.clearOrCountMatchingItems(player.inventory, stack -> stack.getItem() == Items.SKILL_FRAGMENT.get(), 0, true);
                     if (player.isCreative() || fragments >= cost)
                     {
                         if (!player.isCreative())
-                            ContainerHelper.clearOrCountMatchingItems(player.getInventory(),stack -> stack.getItem() == Items.SKILL_FRAGMENT.get(), cost, false);
+                            ItemStackHelper.clearOrCountMatchingItems(player.inventory, stack -> stack.getItem() == Items.SKILL_FRAGMENT.get(), cost, false);
 
                         skillModel.increaseSkillLevel(skill);
 

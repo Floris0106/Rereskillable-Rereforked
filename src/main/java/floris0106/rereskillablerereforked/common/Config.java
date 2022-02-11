@@ -2,10 +2,10 @@ package floris0106.rereskillablerereforked.common;
 
 import floris0106.rereskillablerereforked.common.skills.Requirement;
 import floris0106.rereskillablerereforked.common.skills.Skill;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
@@ -54,7 +54,7 @@ public class Config
         USE_SKILL_FRAGMENTS = builder.define("useSkillFragments", false);
 
         builder.comment("Use XP points to level up instead of XP levels.");
-        builder.comment("This makes it so that when you level up from a higher level, no more XP points will be consumed than when leveling up from a lower level");
+        builder.comment("This makes it so that when you level up from a higher level, no more XP points will be consumed than when levelling up from a lower level");
         USE_XP_POINTS = builder.define("useXpPoints", false);
 
         builder.comment("The minimum amount of skill levels lost on death.");
@@ -89,7 +89,7 @@ public class Config
 
     public Config() { }
 
-    public Config(CompoundTag nbt)
+    public Config(CompoundNBT nbt)
     {
         disableWool = nbt.getBoolean("disable_wool");
         useSkillFragments = nbt.getBoolean("use_skill_fragments");
@@ -103,10 +103,10 @@ public class Config
         costIncrease = nbt.getInt("cost_increase");
         maxLevel = nbt.getInt("max_level");
 
-        ListTag skillLocksNBT = nbt.getList("skill_locks", 8);
+        ListNBT skillLocksNBT = nbt.getList("skill_locks", 8);
         skillLocksNBT.forEach(skillLock ->
         {
-            StringTag string = (StringTag)skillLock;
+            StringNBT string = (StringNBT)skillLock;
 
             String[] entry = string.getAsString().split(" ");
             Requirement[] requirements = new Requirement[entry.length - 1];
@@ -124,7 +124,7 @@ public class Config
         });
     }
 
-    public void encode(CompoundTag nbt)
+    public void encode(CompoundNBT nbt)
     {
         nbt.putBoolean("disable_wool", disableWool);
         nbt.putBoolean("use_skill_fragments", useSkillFragments);
@@ -138,14 +138,14 @@ public class Config
         nbt.putInt("cost_increase", costIncrease);
         nbt.putInt("max_level", maxLevel);
 
-        ListTag skillLocksNBT = new ListTag();
+        ListNBT skillLocksNBT = new ListNBT();
         skillLocks.forEach(((resourceLocation, requirements) ->
         {
             StringBuilder stringBuilder = new StringBuilder(resourceLocation.toString());
             for (Requirement requirement : requirements)
                 stringBuilder.append(" ").append(requirement.toString());
 
-            skillLocksNBT.add(StringTag.valueOf(stringBuilder.toString()));
+            skillLocksNBT.add(StringNBT.valueOf(stringBuilder.toString()));
         }));
 
         nbt.put("skill_locks", skillLocksNBT);

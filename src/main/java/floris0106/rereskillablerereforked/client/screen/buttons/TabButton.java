@@ -1,13 +1,11 @@
 package floris0106.rereskillablerereforked.client.screen.buttons;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import floris0106.rereskillablerereforked.client.screen.SkillScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.button.AbstractButton;
+import net.minecraft.util.text.StringTextComponent;
 
 public class TabButton extends AbstractButton
 {
@@ -16,21 +14,21 @@ public class TabButton extends AbstractButton
     
     public TabButton(int x, int y, TabType type, boolean selected)
     {
-        super(x, y, 31, 28, TextComponent.EMPTY);
+        super(x, y, 31, 28, StringTextComponent.EMPTY);
         
         this.type = type;
         this.selected = selected;
     }
     
     @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks)
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
     {
         Minecraft minecraft = Minecraft.getInstance();
         active = !(minecraft.screen instanceof InventoryScreen) || !((InventoryScreen) minecraft.screen).getRecipeBookComponent().isVisible();
         
         if (active)
         {
-            RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
+            minecraft.textureManager.bind(SkillScreen.RESOURCES);
     
             blit(stack, x, y, selected ? 31 : 0, 166, width, height);
             blit(stack, x + (selected ? 8 : 10), y + 6, 240, 128 + type.iconIndex * 16, 16, 16);
@@ -41,20 +39,19 @@ public class TabButton extends AbstractButton
     public void onPress()
     {
         Minecraft minecraft = Minecraft.getInstance();
-
+        
         switch (type)
         {
-            case INVENTORY -> minecraft.setScreen(new InventoryScreen(minecraft.player));
-            case SKILLS -> minecraft.setScreen(new SkillScreen());
+            case INVENTORY:
+                minecraft.setScreen(new InventoryScreen(minecraft.player));
+                break;
+                
+            case SKILLS:
+                minecraft.setScreen(new SkillScreen());
+                break;
         }
     }
-
-    @Override
-    public void updateNarration(NarrationElementOutput output)
-    {
-
-    }
-
+    
     public enum TabType
     {
         INVENTORY (0),

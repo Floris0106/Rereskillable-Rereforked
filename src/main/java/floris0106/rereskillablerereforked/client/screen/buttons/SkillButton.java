@@ -1,7 +1,6 @@
 package floris0106.rereskillablerereforked.client.screen.buttons;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import floris0106.rereskillablerereforked.common.Config;
 import floris0106.rereskillablerereforked.client.screen.SkillScreen;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
@@ -9,11 +8,10 @@ import floris0106.rereskillablerereforked.common.item.Items;
 import floris0106.rereskillablerereforked.common.network.RequestLevelUp;
 import floris0106.rereskillablerereforked.common.skills.Skill;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.ContainerHelper;
+import net.minecraft.client.gui.widget.button.AbstractButton;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class SkillButton extends AbstractButton
 {
@@ -21,16 +19,16 @@ public class SkillButton extends AbstractButton
     
     public SkillButton(int x, int y, Skill skill)
     {
-        super(x, y, 79, 32, TextComponent.EMPTY);
+        super(x, y, 79, 32, StringTextComponent.EMPTY);
         
         this.skill = skill;
     }
     
     @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks)
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
+        minecraft.textureManager.bind(SkillScreen.RESOURCES);
     
         int level = SkillModel.get().getSkillLevel(skill);
         int maxLevel = Config.getMaxLevel();
@@ -41,13 +39,13 @@ public class SkillButton extends AbstractButton
         blit(stack, x, y, 176, (level == maxLevel ? 64 : 0) + (isMouseOver(mouseX, mouseY) ? 32 : 0), width, height);
         blit(stack, x + 6, y + 8, u, v, 16, 16);
         
-        minecraft.font.draw(stack, new TranslatableComponent(skill.displayName), x + 25, y + 7, 0xFFFFFF);
+        minecraft.font.draw(stack, new TranslationTextComponent(skill.displayName), x + 25, y + 7, 0xFFFFFF);
         minecraft.font.draw(stack, level + "/" + maxLevel, x + 25, y + 18, 0xBEBEBE);
         
         if (isMouseOver(mouseX, mouseY) && level < maxLevel)
         {
             int cost = Config.getStartCost() + (level - 1) * Config.getCostIncrease();
-            int available = Config.getUseSkillFragments() ? ContainerHelper.clearOrCountMatchingItems(minecraft.player.getInventory(), itemStack -> itemStack.getItem() == Items.SKILL_FRAGMENT.get(), 0, true) : minecraft.player.experienceLevel;
+            int available = Config.getUseSkillFragments() ? ItemStackHelper.clearOrCountMatchingItems(minecraft.player.inventory, itemStack -> itemStack.getItem() == Items.SKILL_FRAGMENT.get(), 0, true) : minecraft.player.experienceLevel;
             int colour = available >= cost ? 0x7EFC20 : 0xFC5454;
             String text = Integer.toString(cost);
             
@@ -59,11 +57,5 @@ public class SkillButton extends AbstractButton
     public void onPress()
     {
         RequestLevelUp.send(skill);
-    }
-
-    @Override
-    public void updateNarration(NarrationElementOutput output)
-    {
-
     }
 }
