@@ -20,11 +20,6 @@ public class SkillProvider implements ICapabilitySerializable<CompoundTag>
         optional = LazyOptional.of(() -> skillModel);
     }
     
-    public void invalidate()
-    {
-        optional.invalidate();
-    }
-    
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side)

@@ -1,6 +1,8 @@
 package floris0106.rereskillablerereforked.common;
 
 import com.mojang.brigadier.CommandDispatcher;
+import floris0106.rereskillablerereforked.RereskillableRereforked;
+import floris0106.rereskillablerereforked.common.capabilities.SkillCapability;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
 import floris0106.rereskillablerereforked.common.capabilities.SkillProvider;
 import floris0106.rereskillablerereforked.common.commands.SkillsCommand;
@@ -147,7 +149,7 @@ public class EventHandler
     }
 
     @SubscribeEvent
-    public void onRegisterCapablilities(RegisterCapabilitiesEvent event)
+    public void onRegisterCapabilities(RegisterCapabilitiesEvent event)
     {
         event.register(SkillModel.class);
     }
@@ -160,8 +162,7 @@ public class EventHandler
             SkillModel skillModel = new SkillModel();
             SkillProvider provider = new SkillProvider(skillModel);
             
-            event.addCapability(new ResourceLocation("rereskillable", "cap_skills"), provider);
-            event.addListener(provider::invalidate);
+            event.addCapability(new ResourceLocation(RereskillableRereforked.MOD_ID, "cap_skills"), provider);
         }
     }
 
@@ -200,6 +201,7 @@ public class EventHandler
     public void onPlayerClone(PlayerEvent.Clone event)
     {
         SkillModel.get(event.getPlayer()).skillLevels = SkillModel.get(event.getOriginal()).skillLevels;
+        event.getOriginal().getCapability(SkillCapability.INSTANCE).invalidate();
     }
 
     @SubscribeEvent
