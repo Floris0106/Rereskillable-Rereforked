@@ -1,0 +1,15 @@
+{
+    "item.rereskillablerereforked.skill_fragment": "Fragment de Skills",
+    "skill.mining": "Minage",
+    "skill.gathering": "Collecter",
+    "skill.attack": "Attaque",
+    "skill.defence": "Défense",
+    "skill.building": "Bâtir",
+    "skill.farming": "Farmer",
+    "skill.agility": "Agilité",
+    "skill.magic": "Magie",
+    "container.skills": "Skills",
+    "overlay.message": "Vous ne pouvez pas utiliser cet objet !",
+    "tooltip.requirements": "Conditions requises",
+    "key.skills": "Menu des Skills"
+}
