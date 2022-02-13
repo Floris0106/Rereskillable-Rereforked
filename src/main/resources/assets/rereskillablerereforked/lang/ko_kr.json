@@ -1,0 +1,15 @@
+{
+    "item.rereskillablerereforked.skill_fragment": "숙련도 조각",
+    "skill.mining": "채굴",
+    "skill.gathering": "수집",
+    "skill.attack": "공격",
+    "skill.defence": "방어",
+    "skill.building": "건축",
+    "skill.farming": "농사",
+    "skill.agility": "민첩",
+    "skill.magic": "마법",
+    "container.skills": "숙련도",
+    "overlay.message": "아직 해당 아이템을 사용하실 수 없습니다!",
+    "tooltip.requirements": "숙련도 요구",
+    "key.skills": "숙련도 열기"
+}
