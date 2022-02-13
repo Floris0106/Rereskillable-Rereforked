@@ -25,10 +25,4 @@ public class InventoryTabs
             event.addListener(new TabButton(x, y + 36, TabButton.TabType.SKILLS, skillsOpen));
         }
     }
-    
-    @SubscribeEvent
-    public void onPotionShift(ScreenEvent.PotionShiftEvent event)
-    {
-        event.setCanceled(true);
-    }
 }

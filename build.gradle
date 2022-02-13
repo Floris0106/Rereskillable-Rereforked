@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 
 group = 'floris0106'
-version = '2.0.0'
+version = '2.0.2'
 
 java {
     archivesBaseName = 'rereskillablerereforked'

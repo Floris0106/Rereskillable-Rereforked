@@ -27,8 +27,6 @@ public class SyncConfig
 
     public void encode(FriendlyByteBuf buffer)
     {
-        System.out.println("encode");
-
         CompoundTag nbt = new CompoundTag();
         Config.get().encode(nbt);
         buffer.writeNbt(nbt);
