@@ -44,7 +44,7 @@ public class Overlay extends AbstractGui
                 blit(stack, cx - 71, cy - 4, 0, 194, 142, 40);
     
                 String message = new TranslationTextComponent("overlay.message").getString();
-                minecraft.font.drawShadow(stack, message, (cx - minecraft.font.width(message)) / 2f, cy, 0xFF5555);
+                minecraft.font.drawShadow(stack, message, cx - minecraft.font.width(message) / 2f, cy, 0xFF5555);
     
                 for (int i = 0; i < requirements.size(); i++)
                 {
