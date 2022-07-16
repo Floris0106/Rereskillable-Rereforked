@@ -131,7 +131,7 @@ public class EventHandler
     {
         if (Config.getDisableWool() && event.getEntity() instanceof Sheep)
         {
-            event.getDrops().removeIf(item -> ItemTags.getAllTags().getTag(new ResourceLocation("minecraft", "wool")).contains(item.getItem().getItem()));
+            event.getDrops().removeIf(item -> item.getItem().is(ItemTags.WOOL));
         }
     }
     
