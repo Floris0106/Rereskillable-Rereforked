@@ -13,13 +13,11 @@ apply plugin: 'net.minecraftforge.gradle'
 group = 'floris0106'
 version = '2.0.2'
 
-java {
-    archivesBaseName = 'rereskillablerereforked'
-    toolchain.languageVersion = JavaLanguageVersion.of(17)
-}
+archivesBaseName = 'rereskillablerereforked'
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.18.1'
+    mappings channel: 'official', version: '1.18.2'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -60,10 +58,10 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.59'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
 
-    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.18.1-5.0.6.0')
-    compileOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.18.1-5.0.6.0:api')
+    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0')
+    compileOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0:api')
 }
 
 jar {
