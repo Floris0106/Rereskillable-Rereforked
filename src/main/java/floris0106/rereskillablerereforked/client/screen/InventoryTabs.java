@@ -10,7 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class InventoryTabs
 {
     @SubscribeEvent
-    public void onInitGui(ScreenEvent.InitScreenEvent event)
+    public void onInitGui(ScreenEvent.Init event)
     {
         Screen screen = event.getScreen();
         

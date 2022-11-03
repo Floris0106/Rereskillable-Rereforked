@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import floris0106.rereskillablerereforked.client.screen.buttons.SkillButton;
 import floris0106.rereskillablerereforked.common.skills.Skill;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class SkillScreen extends Screen
@@ -14,7 +14,7 @@ public class SkillScreen extends Screen
     
     public SkillScreen()
     {
-        super(new TranslatableComponent("container.skills"));
+        super(Component.translatable("container.skills"));
     }
     
     @Override

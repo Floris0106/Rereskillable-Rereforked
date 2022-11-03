@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[40.0,)"
+loaderVersion = "[43.0,)"
 license = "MIT"
 
 [[mods]]
@@ -17,20 +17,20 @@ Rereskillable Rereforked is a fork of Rereskillable, which is a fork of Reskilla
 [[dependencies.rereskillablerereforked]]
     modId = "forge"
     mandatory = true
-    versionRange = "[40.0,)"
+    versionRange = "[43.0,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.rereskillablerereforked]]
     modId = "minecraft"
     mandatory = true
-    versionRange = "[1.18.2]"
+    versionRange = "[1.19.2]"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.rereskillablerereforked]]
     modId = "curios"
     mandatory = false
-    versionRange = "[1.18.2-5.0.6.3,)"
+    versionRange = "[1.19.2-5.1.1.0,)"
     ordering = "AFTER"
     side = "BOTH"

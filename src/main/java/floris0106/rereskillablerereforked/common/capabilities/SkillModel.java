@@ -5,6 +5,7 @@ import floris0106.rereskillablerereforked.common.network.SkillWarning;
 import floris0106.rereskillablerereforked.common.skills.Requirement;
 import floris0106.rereskillablerereforked.common.skills.Skill;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,17 +36,17 @@ public class SkillModel implements INBTSerializable<CompoundTag>
 
     public boolean canUseItem(Player player, ItemStack item)
     {
-        return canUse(player, item.getItem().getRegistryName());
+        return canUse(player, Registry.ITEM.getKey(item.getItem()));
     }
     
     public boolean canUseBlock(Player player, Block block)
     {
-        return canUse(player, block.getRegistryName());
+        return canUse(player, Registry.BLOCK.getKey(block));
     }
     
     public boolean canUseEntity(Player player, Entity entity)
     {
-        return canUse(player, entity.getType().getRegistryName());
+        return canUse(player, Registry.ENTITY_TYPE.getKey(entity.getType()));
     }
     
     private boolean canUse(Player player, ResourceLocation resource)
