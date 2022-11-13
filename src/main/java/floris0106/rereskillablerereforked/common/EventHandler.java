@@ -52,7 +52,7 @@ public class EventHandler
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRegisterKeybindingsEvent(RegisterKeyMappingsEvent event){
-        event.register(Keybind.getOpenKey());
+        event.register(Keybind.openKey);
     }
     
     @SubscribeEvent(priority = EventPriority.HIGHEST)
