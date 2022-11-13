@@ -1,32 +1,29 @@
 package floris0106.rereskillablerereforked.client;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import floris0106.rereskillablerereforked.client.screen.SkillScreen;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 
 public class Keybind
 {
-    private static final KeyMapping openKey = new KeyMapping("key.skills", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, 71, "Rereskillable");
+    public static final KeyMapping openKey = new KeyMapping("key.skills", GLFW.GLFW_KEY_G, "Rereskillable");
 
-    public Keybind()
-    {
-    }
-
-    public static KeyMapping getOpenKey()
-    {
-        return openKey;
-    }
+    public Keybind() {}
 
     @SubscribeEvent
-    public void onKeyInput(InputEvent.InteractionKeyMappingTriggered event)
+    public void onKeyInput(TickEvent.ClientTickEvent evt)
     {
+        if (evt.phase != TickEvent.Phase.END) {
+            return;
+        }
+
         Minecraft minecraft = Minecraft.getInstance();
 
-        if (openKey.consumeClick() && minecraft.screen == null)
+        if (openKey.consumeClick() && minecraft.screen == null) {
             minecraft.setScreen(new SkillScreen());
+        }
     }
 }
