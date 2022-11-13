@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 public class TabButton extends AbstractButton
 {
@@ -16,7 +16,7 @@ public class TabButton extends AbstractButton
     
     public TabButton(int x, int y, TabType type, boolean selected)
     {
-        super(x, y, 31, 28, TextComponent.EMPTY);
+        super(x, y, 31, 28, Component.empty());
         
         this.type = type;
         this.selected = selected;

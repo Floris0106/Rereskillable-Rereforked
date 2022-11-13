@@ -11,5 +11,6 @@
     "container.skills": "Skills",
     "overlay.message": "You can't use this item yet!",
     "tooltip.requirements": "Requirements",
-    "key.skills": "Open Skills"
+    "key.skills": "Open Skills",
+    "Rereskillable": "Rereskillable"
 }

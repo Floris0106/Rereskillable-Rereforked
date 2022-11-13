@@ -9,7 +9,7 @@ import floris0106.rereskillablerereforked.common.skills.Skill;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.command.EnumArgument;
 
@@ -31,7 +31,7 @@ public class GetCommand implements Command<CommandSourceStack>
         Skill skill = context.getArgument("skill", Skill.class);
         int level = SkillModel.get(player).getSkillLevel(skill);
 
-        context.getSource().sendSuccess(new TranslatableComponent(skill.displayName).append(" " + level), true);
+        context.getSource().sendSuccess(Component.translatable(skill.displayName).append(" " + level), true);
 
         return 1;
     }
