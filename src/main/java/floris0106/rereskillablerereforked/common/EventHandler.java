@@ -198,6 +198,7 @@ public class EventHandler
     public void onPlayerClone(PlayerEvent.Clone event)
     {
         if(event.isWasDeath()){
+            event.getOriginal().revive();
             event.getOriginal().getCapability(SkillCapability.INSTANCE).ifPresent(oldStore -> {
                 event.getPlayer().getCapability(SkillCapability.INSTANCE).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
