@@ -1,5 +1,7 @@
 package floris0106.rereskillablerereforked.common;
 
+import floris0106.rereskillablerereforked.RereskillableRereforked;
+import floris0106.rereskillablerereforked.common.capabilities.SkillCapability;
 import floris0106.rereskillablerereforked.common.capabilities.SkillModel;
 import floris0106.rereskillablerereforked.common.capabilities.SkillProvider;
 import floris0106.rereskillablerereforked.common.item.Items;
@@ -148,11 +150,15 @@ public class EventHandler
     {
         if (event.getObject() instanceof PlayerEntity)
         {
-            SkillModel skillModel = new SkillModel();
-            SkillProvider provider = new SkillProvider(skillModel);
-            
-            event.addCapability(new ResourceLocation("rereskillable", "cap_skills"), provider);
+            if(!event.getObject().getCapability(SkillCapability.INSTANCE).isPresent()) {
+                SkillModel skillModel = new SkillModel();
+                SkillProvider provider = new SkillProvider(skillModel);
+                event.addCapability(new ResourceLocation("rereskillable", "cap_skills"), provider);
+            }
+            /*
+            (don't know what this does, first time messing with forge)
             event.addListener(provider::invalidate);
+            */
         }
     }
 
@@ -187,11 +193,17 @@ public class EventHandler
             event.getPlayer().addItem(new ItemStack(Items.SKILL_FRAGMENT.get(), fragments));
         }
     }
-    
+
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event)
     {
-        SkillModel.get(event.getPlayer()).skillLevels = SkillModel.get(event.getOriginal()).skillLevels;
+        if(event.isWasDeath()){
+            event.getOriginal().getCapability(SkillCapability.INSTANCE).ifPresent(oldStore -> {
+                event.getPlayer().getCapability(SkillCapability.INSTANCE).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+        }
     }
 
     @SubscribeEvent

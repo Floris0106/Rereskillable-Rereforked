@@ -113,4 +113,8 @@ public class SkillModel implements INBTSerializable<CompoundNBT>
         skillLevels[6] = nbt.getInt("agility");
         skillLevels[7] = nbt.getInt("magic");
     }
+
+    public void copyFrom(SkillModel oldStore) {
+        this.skillLevels = oldStore.skillLevels;
+    }
 }

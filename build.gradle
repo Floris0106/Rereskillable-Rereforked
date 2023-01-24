@@ -30,6 +30,9 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
 
+            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             mods {
                 rereskillablerereforked {
                     source sourceSets.main
@@ -57,10 +60,18 @@ repositories {
     maven {
         url = 'https://maven.theillusivec4.top/'
     }
+    maven {
+        url = 'https://cursemaven.com/'
+    }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.4'
+    //minecraft 'net.minecraftforge:forge:1.16.5-36.2.4'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
+
+    implementation fg.deobf('curse.maven:obfuscate-289380:3740120')
+    implementation fg.deobf("curse.maven:sorceryfight-471288:3786954")
+    implementation fg.deobf("curse.maven:jujutsuanimation-817073:4360873")
 
     runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.3')
     compileOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.3:api')
